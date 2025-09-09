@@ -1,7 +1,6 @@
-// URL base da sua API Spring Boot
+
 const BASE_URL = 'http://localhost:8080/agenda';
 
-// Referências aos elementos do HTML
 const agendaForm = document.getElementById('agendaForm');
 const agendaIdInput = document.getElementById('agendaId');
 const tituloInput = document.getElementById('titulo');
@@ -9,13 +8,13 @@ const descricaoInput = document.getElementById('descricao');
 const agendaList = document.getElementById('agendaList');
 const cancelarBtn = document.getElementById('cancelarBtn');
 
-// Função para buscar e renderizar todos os compromissos
+
 async function fetchAgendas() {
     try {
         const response = await fetch(BASE_URL);
         const agendas = await response.json();
 
-        // Limpa a lista
+  
         agendaList.innerHTML = '';
 
         if (agendas.length === 0) {
@@ -43,7 +42,7 @@ async function fetchAgendas() {
     }
 }
 
-// Manipulador de evento para o formulário (salvar/atualizar)
+
 agendaForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -73,7 +72,7 @@ agendaForm.addEventListener('submit', async (event) => {
         if (response.ok) {
             agendaForm.reset();
             agendaIdInput.value = '';
-            fetchAgendas(); // Atualiza a lista
+            fetchAgendas(); 
         } else {
             console.error("Erro ao salvar/atualizar o compromisso. Status:", response.status);
             console.warn("Verifique se o seu back-end está aceitando o tipo de dados enviado.");
@@ -98,10 +97,8 @@ async function editAgenda(id) {
     }
 }
 
-// Deleta um compromisso
+
 async function deleteAgenda(id) {
-    // Substituído o confirm() para evitar bloqueios de navegador.
-    // Em uma aplicação real, você deve implementar um modal de confirmação.
     console.log(`Tentando excluir o compromisso com ID: ${id}`);
     try {
         const response = await fetch(`${BASE_URL}/${id}`, {
@@ -109,7 +106,7 @@ async function deleteAgenda(id) {
         });
 
         if (response.ok) {
-            fetchAgendas(); // Atualiza a lista
+            fetchAgendas(); 
         } else {
             console.error("Erro ao excluir o compromisso. Status:", response.status);
         }
@@ -118,12 +115,9 @@ async function deleteAgenda(id) {
         console.warn("Verifique a comunicação com o back-end.");
     }
 }
-
-// Limpa o formulário quando o botão "Cancelar" é clicado
 cancelarBtn.addEventListener('click', () => {
     agendaForm.reset();
     agendaIdInput.value = '';
 });
 
-// Carrega os compromissos quando a página é carregada
 window.onload = fetchAgendas;
