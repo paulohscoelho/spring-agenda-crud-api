@@ -53,7 +53,7 @@ public class AgendaService {
             agendaRepository.save(agendaExistente);
             return Optional.of(agendaExistente);
         }else {
-            return Optional.empty();//se o ID nao for encontrado, entao devolve 'vazio'
+            return Optional.empty();
         }
 
 
