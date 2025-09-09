@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@RestController//ENDPOINT PARA API
-@RequestMapping("/agenda")// CAMINHO PARA CHEGAR NA API
+@RestController
+@RequestMapping("/agenda")
 public class AgendaController {
 
     public final AgendaService agendaService;
@@ -36,26 +36,11 @@ public class AgendaController {
                     agenda.getTitulo(),
                     agenda.getDescricao()
             );
-            return ResponseEntity.ok(response);//ou ResponseEntity.ok().build()
+            return ResponseEntity.ok(response);
         }else{
             return ResponseEntity.notFound().build();
         }
     }
-
-
-
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Agenda> chamarId(@PathVariable("id") Long id) {
-//        Optional<Agenda> agendaOptional = agendaService.chamarPorId(id);
-//        if (agendaOptional.isPresent()) {
-//            return ResponseEntity.ok(agendaOptional.get());//ou ResponseEntity.ok().build()
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-
-
 
     @GetMapping
     public ResponseEntity<List<AgendaResponseDTO>> chamarTodos(){
@@ -70,36 +55,20 @@ public class AgendaController {
         return ResponseEntity.ok(response);
     }
 
-
-//    @GetMapping
-//    public ResponseEntity<List<Agenda>> chamarTodos(){
-//        List<Agenda> agendas = agendaService.chamaPorTodos();
-//        return ResponseEntity.ok(agendas);
-//    }
-
-
-
-
-
     @PostMapping
     public ResponseEntity<AgendaResponseDTO> salvarAgenda(@RequestBody AgendaRequestDTO request){
-        //1. converte o DTO de entrada para a entidade
+        
         Agenda agenda = new Agenda();
-        //SETTANDO O 'DTO' DE ENTRADA  = AgendaRequestDTO
-        agenda.setTitulo(request.getTitulo());//ou seja, agenda.setTitulo vai setar o request.getTitulo();
-        agenda.setDescricao(request.getDescricao()); //ou seja, setDescricao vai setar o request.getDescricao();
-
-        //2. chama o serviço com a Entidade
+        agenda.setTitulo(request.getTitulo());
+        agenda.setDescricao(request.getDescricao());
         Agenda agendaSalva = agendaService.salvar(agenda);
 
-        //3. DEPOIS QUE SETTOU O DTO, agora CONVERTE para o 'DTO' de saida = AgendaResponseDTO
         AgendaResponseDTO response = new AgendaResponseDTO();
         response.setId(agenda.getId());
         response.setTitulo(agenda.getTitulo());
         response.setDescricao(agenda.getDescricao());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
     }
 
 
@@ -113,18 +82,15 @@ public class AgendaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<AgendaResponseDTO> updateId(@PathVariable Long id,@RequestBody AgendaRequestDTO request){
-        //1. converter o DTO de entrada para a sua Entidade agenda.
         Agenda agenda = new Agenda();
         agenda.setTitulo(request.getTitulo());
         agenda.setDescricao(request.getDescricao());
 
-
         Optional<Agenda> agendaOptional = agendaService.updatePorId(id,agenda);
 
-        //3. verificar o resultado da resposta
         if (agendaOptional.isPresent()){
             Agenda agendaAtualizada = agendaOptional.get();
-            //se a agenda for encontrada e atualizada, converter a Entidade agenda para o DTO de resposta.
+            
             AgendaResponseDTO response = new AgendaResponseDTO();
             response.setId(agendaAtualizada.getId());
             response.setTitulo(agendaAtualizada.getTitulo());
@@ -137,18 +103,5 @@ public class AgendaController {
         }
 
     }
-
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Agenda> updateId(@PathVariable Long id,@RequestBody Agenda agenda){
-//        Optional<Agenda> agendaOptional = agendaService.updatePorId(id,agenda);
-//
-//        if (agendaOptional.isPresent()){
-//            return ResponseEntity.ok(agendaOptional.get());
-//        }else {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//    }
-
 
 }
