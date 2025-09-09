@@ -28,8 +28,7 @@ class AgendaServiceTest {
 
     private Agenda agendaDeTeste;
 
-    //https://gemini.google.com/share/05dee44200f0 codigo
-    //AMANHA EU ESCREVO NO CADERNO O NOTPAD E ALGUMAS DICAS.
+   
 
 
     @BeforeEach
@@ -40,76 +39,64 @@ class AgendaServiceTest {
         agendaDeTeste.setDescricao("Discutir novas tarefas.");
     }
 
-    // Teste para o método 'salvar()'.
+    
     @Test
-    void deveSalvarAgendaComSucesso() {//.save
-        when(agendaRepository.save(any(Agenda.class))).thenReturn(agendaDeTeste);  //given
+    void deveSalvarAgendaComSucesso() {
+        when(agendaRepository.save(any(Agenda.class))).thenReturn(agendaDeTeste); 
 
-        Agenda agendaSalva = agendaService.salvar(new Agenda()); //when
+        Agenda agendaSalva = agendaService.salvar(new Agenda()); 
 
-        //asserts são usandos para verificar: Optional<Agenda>,List<Agenda> ou Agenda agendaSalva
+        
         assertNotNull(agendaSalva);
-        assertEquals("Reunião de Equipe", agendaSalva.getTitulo());// then
+        assertEquals("Reunião de Equipe", agendaSalva.getTitulo());
     }
 
     @Test
-    void deveEncontrarAgendaQuandoIDExiste(){//findById()
-        when(agendaRepository.findById(1L)).thenReturn(Optional.of(agendaDeTeste));//given
+    void deveEncontrarAgendaQuandoIDExiste(){
+        when(agendaRepository.findById(1L)).thenReturn(Optional.of(agendaDeTeste));
 
-        Optional<Agenda> resultado = agendaService.chamarPorId(1L); //when
-
-        assertTrue(resultado.isPresent());//Then
+        Optional<Agenda> resultado = agendaService.chamarPorId(1L); 
+        assertTrue(resultado.isPresent());
         assertEquals(1L,resultado.get().getId());
     }
 
     @Test
-    void naoDeveEncontrarAgendaQuandoIDNaoExiste(){//findById()
-        when(agendaRepository.findById(999L)).thenReturn(Optional.empty());//Given cenário
+    void naoDeveEncontrarAgendaQuandoIDNaoExiste(){
+        when(agendaRepository.findById(999L)).thenReturn(Optional.empty());
 
-        Optional<Agenda> resultado = agendaService.chamarPorId(999L);//When ação
-
-        //asserts são usandos para verificar: Optional<Agenda>,List<Agenda> ou Agenda agendaSalva
-//        assertTrue(resultado.isPresent());//Then verificação
-        assertFalse(resultado.isPresent());//Then verificação
-
+        Optional<Agenda> resultado = agendaService.chamarPorId(999L);
+        assertFalse(resultado.isPresent());
     }
 
     @Test
-    void deveRetornarTodasAsAgendas(){//findAll()
+    void deveRetornarTodasAsAgendas(){
         List<Agenda> agendas = List.of(agendaDeTeste, new Agenda());
-        when(agendaRepository.findAll()).thenReturn(agendas);//Given cenario
+        when(agendaRepository.findAll()).thenReturn(agendas);
+        List<Agenda> resultado = agendaService.chamaPorTodos();
 
-        List<Agenda> resultado = agendaService.chamaPorTodos();//When ação
-
-        //asserts são usandos para verificar: Optional<Agenda>,List<Agenda> ou Agenda agendaSalva
-        assertFalse(resultado.isEmpty());//Then verificação
-        assertEquals(2,resultado.size());//Os dois itens é 'agendaDeTeste' e 'new Agenda()'//Then verificação
-
+        assertFalse(resultado.isEmpty());
+        assertEquals(2,resultado.size());
     }
 
     @Test
-    void deveDeletarAgendasQuandoIDExiste(){//deletar
-        when(agendaRepository.existsById(1L)).thenReturn(true);//Given
-
-        agendaService.deletarPorId(1L);//When
-
-        //o ID realmente existe  e deve deletar
+    void deveDeletarAgendasQuandoIDExiste(){
+        when(agendaRepository.existsById(1L)).thenReturn(true);
+        agendaService.deletarPorId(1L);
         verify(agendaRepository,times(1)).deleteById(1L);
     }
 
     @Test
-    void naoDeveDeletarAgendasQuandoIDNãoExiste(){//deletar
+    void naoDeveDeletarAgendasQuandoIDNãoExiste(){
         when(agendaRepository.existsById(10L)).thenReturn(false);
 
         agendaService.deletarPorId(10L);
 
-        //o ID NÃO existe entao NÃO deve deletar
+        
         verify(agendaRepository,times(0)).deleteById(10L);
     }
 
     @Test
-    void  deveAtualizarAgendaQuandoIDExiste(){//atualizar
-        //continuar nesse de atualizar
+    void  deveAtualizarAgendaQuandoIDExiste(){
 
         Agenda agendaExistente = new Agenda();
         agendaExistente.setId(1L);
@@ -124,7 +111,7 @@ class AgendaServiceTest {
         when(agendaRepository.findById(1L)).thenReturn(Optional.of(agendaExistente));
         when(agendaRepository.save(any(Agenda.class))).thenReturn(agendaExistente);
 
-        //public Optional<Agenda>                  updatePorId(Long id, Agenda agenda){//classe AgendaService
+        
         Optional<Agenda> resultado = agendaService.updatePorId(1L,agendaComDadosAtualizados);
 
         assertTrue(resultado.isPresent());
@@ -136,12 +123,9 @@ class AgendaServiceTest {
 
     @Test
     void naoDeveAtualizarAgendaQuandoIDNaoExiste(){
-        // Simulamos que a busca por ID retorna um Optional vazio.
-        when(agendaRepository.findById(99L)).thenReturn(Optional.empty());//given
+        when(agendaRepository.findById(99L)).thenReturn(Optional.empty());
+        Optional<Agenda> resultado = agendaService.updatePorId(99L, new Agenda());
 
-        Optional<Agenda> resultado = agendaService.updatePorId(99L, new Agenda());//when
-
-        //then(verificao)
         assertFalse(resultado.isPresent());
         verify(agendaRepository,never()).save(any(Agenda.class));
     }
