@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ <p id="demo"></p>
+
+ <script>
+  const text = '{"name":"John","birth":"1986-12-13"}';
+  //key == birth
+  //value == "1986-12-13"
+  const pick = JSON.parse(text,function(key,value){//usando parametro 'reviver':function(key,value)
+    if (key == "birth") {//se key for igual birth, entao transforme birth em um objeto Data JavaScript
+      return new Date(value);//transformando 'value'(1986-12-13) em Data JS: Fri Dec 12 1986 22:00:00 GMT-0200
+    }else {
+      return value;
+    }
+  });
+
+  document.getElementById("demo").innerHTML = pick.name + ", " + pick.birth;
+ </script>
+</body>
+</html>

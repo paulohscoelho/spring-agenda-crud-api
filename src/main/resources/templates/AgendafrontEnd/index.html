@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+        <h1>Gerenciador de Agenda</h1>
+        <form id="agendaForm">
+            <input type="hidden"  id="agendaId">
+            <input type="text"  id="titulo" placeholder="Titulo de Compromisso" required>
+            <textarea id="descricao" placeholder="Descricao (opcional)"></textarea>
+            <button type="submit">Salvar Compromisso</button>
+            <button type="button" id="cancelarBtn">Cancelar</button>
+
+
+        </form>
+        <h2>Meus Compromissos</h2>
+        <ul id="agendaList">
+        </ul>
+        <script src="js/app.js"></script>
+    
+    
+</body>
+</html>
